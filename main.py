@@ -63,18 +63,18 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # TODO: Implement function
     # kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3)
     # l7 1x1 and deconv
-    l7_conv = tf.layers.conv2d(vgg_layer7_out, num_classes, (1,1), (1,1), kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
-    l7_deconv = tf.layers.conv2d_transpose(l7_conv, num_classes, (4,4), (2,2), padding='SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    l7_conv = tf.layers.conv2d(vgg_layer7_out, num_classes, (1,1), (1,1), kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    l7_deconv = tf.layers.conv2d_transpose(l7_conv, num_classes, (4,4), (2,2), padding='SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     # L4 1x1 conv, add l7 output and deconv
-    l4_conv = tf.layers.conv2d(vgg_layer4_out, num_classes, (1,1), (1,1), kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    l4_conv = tf.layers.conv2d(vgg_layer4_out, num_classes, (1,1), (1,1), kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     l4_add = tf.add(l4_conv, l7_deconv)
-    l4_deconv = tf.layers.conv2d_transpose(l4_add , num_classes, (4,4), (2,2), padding='SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    l4_deconv = tf.layers.conv2d_transpose(l4_add , num_classes, (4,4), (2,2), padding='SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     # L3 1x1 conv, add l4 output and deconv
-    l3_conv = tf.layers.conv2d(vgg_layer3_out, num_classes, (1,1), (1,1), kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    l3_conv = tf.layers.conv2d(vgg_layer3_out, num_classes, (1,1), (1,1), kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     l3_add = tf.add(l3_conv, l4_deconv)
-    l3_deconv = tf.layers.conv2d_transpose(l3_add, num_classes, (16,16), (8,8), padding='SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+    l3_deconv = tf.layers.conv2d_transpose(l3_add, num_classes, (16,16), (8,8), padding='SAME', kernel_initializer=tf.truncated_normal_initializer(stddev=0.01), kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
 
     return l3_deconv
 tests.test_layers(layers)
@@ -151,9 +151,9 @@ def run():
 
     # Parameters
     global epochs, batch_size, keep_prob, learning_rate_
-    epochs = 15
-    batch_size = 20
-    keep_prob_ = 0.43
+    epochs = 25
+    batch_size = 3
+    keep_prob_ = 0.5
     learning_rate_ = 1e-4
 
     # Download pretrained vgg model
